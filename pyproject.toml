@@ -1,0 +1,17 @@
+[project]
+name = "registration-sim"
+version = "1.0.0"
+description = "Deterministic simulation of a university student registration centre"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["matplotlib>=3.8"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+registration-sim = "registration_sim.__main__:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
