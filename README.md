@@ -64,6 +64,10 @@ All 20 students are processed in every experiment. The portal computer is the li
 
 The most efficient allocation is one officer and two computers, because it is the only one that finishes the whole group inside the working period.
 
+## Class presentation
+
+`presentation/Palm_University_College_Registration_Simulation.pptx` is a 15-slide deck of this project for the class. Each slide has speaker notes.
+
 ## How this meets the brief
 
 - **a.** The model is a deterministic simulation. Arrivals, processing times, and resources are fixed.
