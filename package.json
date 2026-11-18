@@ -1,0 +1,7 @@
+{
+  "name": "deterministic-simulation-model",
+  "private": true,
+  "scripts": {
+    "vercel-build": "mkdir -p .vercel/output/static/output/figures && cp index.html .vercel/output/static/index.html && cp output/figures/* .vercel/output/static/output/figures/ && printf '%s\\n' '{\"version\":3}' > .vercel/output/config.json"
+  }
+}
