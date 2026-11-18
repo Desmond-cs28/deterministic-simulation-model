@@ -2,6 +2,12 @@
   "name": "deterministic-simulation-model",
   "private": true,
   "scripts": {
-    "vercel-build": "mkdir -p .vercel/output/static/output/figures && cp index.html .vercel/output/static/index.html && cp output/figures/* .vercel/output/static/output/figures/ && printf '%s\\n' '{\"version\":3}' > .vercel/output/config.json"
+    "vercel-build": "mkdir -p public/output/figures && cp output/figures/*.png public/output/figures/ && next build",
+    "start": "next start -p 3847"
+  },
+  "dependencies": {
+    "next": "15.5.29",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   }
 }
