@@ -1,8 +1,18 @@
 # Palm University College registration simulation
 
-A deterministic Python simulation of one morning of undergraduate course registration at Palm University College, Manya Jorpanya. Student arrivals, processing times, and the number of officers and computers are fixed, so the same inputs always produce the same schedule.
+A deterministic simulation of one morning of undergraduate course registration at Palm University College, Manya Jorpanya. Student arrivals, processing times, and the number of officers and computers are fixed, so the same inputs always produce the same schedule.
 
-The whole solution is Python. Matplotlib draws the graphs.
+The results page is live at https://deterministic-simulation-model.apps.grok.bot.
+
+## Languages
+
+| Part | Language | What it does |
+| --- | --- | --- |
+| `registration.py` and `registration_sim/` | Python | The simulation, the experiments, the tables, and the graphs |
+| `index.html` and `output/figures/` | HTML and PNG, written by Python | The results page and its three graphs |
+| `app/route.js`, `next.config.mjs`, `package.json` | JavaScript (Next.js) | Serves that results page so the live site can be published |
+
+Matplotlib draws the graphs. Pytest checks the schedule against a hand-worked case. The Next.js files do not recalculate the simulation. They return the page Python already wrote.
 
 ## What the model represents
 
@@ -18,7 +28,7 @@ Each student takes the same three steps:
 
 An officer does the check and the timetable. A computer is used only for the Student Portal. A student moves to the next queue as soon as a step ends. If the needed officer or computer is busy, the student who has waited longest goes next.
 
-## Run it
+## Run the simulation
 
 ```bash
 python3 -m venv .venv
@@ -27,14 +37,20 @@ pip install -r requirements.txt
 python registration.py
 ```
 
-Change the morning with `--students`, `--interarrival`, `--officers`, `--computers`, and `--session`. The three experiments still use that same group of students and only change the officers and the computers.
+Change the morning with `--students`, `--interarrival`, `--officers`, `--computers`, and `--session`. The three experiments keep that same group of students and only change the officers and the computers.
 
 ```bash
 python registration.py --students 20 --officers 1 --computers 2
 python -m pytest
 ```
 
-The program prints the activity table, the single-run results, and the comparison of the three allocations. It writes three graphs and a CSV table to `output/figures/`, and it writes `index.html` so the results can be opened in a browser.
+The program prints the activity table, the single-run results, and the comparison of the three allocations. It writes:
+
+- `output/figures/makespan_by_scenario.png`
+- `output/figures/utilisation_by_scenario.png`
+- `output/figures/students_within_period.png`
+- `output/figures/scenario_comparison.csv`
+- `index.html`, which you can open in a browser
 
 ## The three experiments
 
@@ -58,4 +74,4 @@ The most efficient allocation is one officer and two computers, because it is th
 - **f.** Each run reports utilisation, students processed, idle time, and system efficiency. System efficiency is time being served divided by time being served plus time waiting.
 - **g.** The program runs three allocations: the current desk, a second officer, and a second computer.
 - **h.** The program names the most efficient allocation: one officer and two computers.
-- **i.** The printed tables, `output/figures/scenario_comparison.csv`, and the three PNG graphs present the results. The paragraphs after the table interpret them.
+- **i.** The printed tables, the CSV file, the three graphs, and https://deterministic-simulation-model.apps.grok.bot present and interpret the results.

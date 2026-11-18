@@ -1,0 +1,5 @@
+# GitHub language share: the simulation is Python.
+# The lockfile and the generated results page are not source.
+package-lock.json linguist-generated
+index.html linguist-generated
+output/figures/* linguist-generated

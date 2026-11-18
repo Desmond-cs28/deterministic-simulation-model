@@ -1,7 +1,7 @@
 [project]
 name = "registration-sim"
 version = "1.0.0"
-description = "Deterministic simulation of a university student registration centre"
+description = "Deterministic Python simulation of course registration at Palm University College"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["matplotlib>=3.8"]

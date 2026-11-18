@@ -1,6 +1,7 @@
 {
   "name": "deterministic-simulation-model",
   "private": true,
+  "description": "Serves the Palm University College registration results page written by the Python simulation.",
   "scripts": {
     "vercel-build": "mkdir -p public/output/figures && cp output/figures/*.png public/output/figures/ && next build",
     "start": "next start -p 3847"
