@@ -3,7 +3,7 @@
 Examples
 --------
 python -m registration_sim
-python -m registration_sim --students 40 --officers 3 --computers 4
+python -m registration_sim --students 20 --officers 1 --computers 2
 python -m registration_sim --charts output/figures
 """
 
@@ -21,13 +21,13 @@ from registration_sim.constants import (
     DEFAULT_OFFICER_COUNT,
     DEFAULT_STUDENT_COUNT,
     DEFAULT_WORKING_PERIOD_MINUTES,
+    MIN_RESOURCE_UNITS,
     ResourceKind,
 )
 from registration_sim.engine import simulate
 from registration_sim.experiments import (
     default_config,
     recommend,
-    run_sensitivity,
     run_study,
 )
 from registration_sim.metrics import measure
@@ -46,7 +46,7 @@ from registration_sim.tables import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Deterministic simulation of North Hall student registration.",
+        description="Deterministic simulation of course registration at Palm University College.",
     )
     parser.add_argument("--students", type=int, default=DEFAULT_STUDENT_COUNT)
     parser.add_argument("--interarrival", type=int, default=DEFAULT_INTERARRIVAL_MINUTES)
@@ -121,6 +121,11 @@ def write_csv(path: Path, runs: tuple) -> None:
         writer.writerows(comparison_rows(runs))
 
 
+def _unit_label(count: int, singular: str, plural: str) -> str:
+    word = singular if count == MIN_RESOURCE_UNITS else plural
+    return f"{count} {word}"
+
+
 def main() -> None:
     args = build_parser().parse_args()
     if args.export_parity is not None:
@@ -136,7 +141,7 @@ def main() -> None:
 
     officer_work = processing_minutes_for(ResourceKind.OFFICER)
     computer_work = processing_minutes_for(ResourceKind.COMPUTER)
-    print("North Hall registration — deterministic simulation")
+    print("Palm University College — course registration desk")
     print(
         f"Each student: {total_processing_minutes()} minutes "
         f"({officer_work} with an officer, {computer_work} on a computer)."
@@ -148,7 +153,8 @@ def main() -> None:
     print(
         f"Single run: {config.student_count} students, "
         f"every {config.interarrival_minutes} min, "
-        f"{config.officer_count} officers, {config.computer_count} computers, "
+        f"{_unit_label(config.officer_count, 'officer', 'officers')}, "
+        f"{_unit_label(config.computer_count, 'computer', 'computers')}, "
         f"session {config.working_period_minutes} min."
     )
     print(f"Makespan: {single_metrics.makespan_minutes} min")
@@ -176,8 +182,7 @@ def main() -> None:
         print()
 
     if args.charts is not None:
-        sensitivity = run_sensitivity(config)
-        figures = save_study_charts(study, sensitivity, args.charts)
+        figures = save_study_charts(study, args.charts)
         csv_path = args.charts / COMPARISON_CSV
         write_csv(csv_path, study)
         for figure in figures:

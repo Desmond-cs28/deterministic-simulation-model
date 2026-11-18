@@ -31,8 +31,8 @@ export function ExperimentPanel({
     <SectionBlock
       id="experiments"
       kicker="Experiments"
-      title="Six ways to staff the same morning"
-      lede="The cohort, the arrival interval, and the session length stay fixed. Only the officer pool and the computer pool change. Open a row to load that allocation into the timeline above."
+      title="Three ways to staff the same morning"
+      lede="The students, the arrival interval, and the session stay fixed. The first row is the desk as it stands. The next adds an officer. The last adds a portal computer. Open a row to see that morning on the timeline."
     >
       <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
         <Table>
@@ -48,8 +48,7 @@ export function ExperimentPanel({
               <TableHead>Computer util.</TableHead>
               <TableHead>Idle min.</TableHead>
               <TableHead>Avg wait</TableHead>
-              <TableHead>Service eff.</TableHead>
-              <TableHead>Score</TableHead>
+              <TableHead>System eff.</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -85,7 +84,6 @@ export function ExperimentPanel({
                   <TableCell className="tabular-nums">{run.metrics.overall_idle_minutes}</TableCell>
                   <TableCell className="tabular-nums">{format_one_decimal(run.metrics.average_waiting_minutes)}</TableCell>
                   <TableCell className="tabular-nums">{format_percent(run.metrics.service_efficiency)}</TableCell>
-                  <TableCell className="tabular-nums">{format_score(run.metrics.efficiency_score)}</TableCell>
                 </TableRow>
               )
             })}

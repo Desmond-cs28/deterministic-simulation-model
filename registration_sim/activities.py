@@ -1,12 +1,11 @@
-"""Registration activities and the resource each one seizes."""
+"""The three steps of course registration at Palm University College."""
 
 from dataclasses import dataclass
 
 from registration_sim.constants import (
-    CARD_ISSUE_MINUTES,
-    COURSE_ENROLMENT_MINUTES,
-    DOCUMENT_VERIFICATION_MINUTES,
-    FEE_ASSESSMENT_MINUTES,
+    PORTAL_REGISTRATION_MINUTES,
+    REGISTRY_CHECK_MINUTES,
+    TIMETABLE_ISSUE_MINUTES,
     ZERO_MINUTES,
     ActivityId,
     ResourceKind,
@@ -26,47 +25,36 @@ class ActivitySpec:
 # Every student walks this sequence. Stages do not overlap for one student.
 ACTIVITY_SEQUENCE: tuple[ActivitySpec, ...] = (
     ActivitySpec(
-        activity_id=ActivityId.DOCUMENT_VERIFICATION,
-        label="Document verification",
-        short_label="Documents",
+        activity_id=ActivityId.REGISTRY_CHECK,
+        label="Registry check",
+        short_label="Registry",
         resource_kind=ResourceKind.OFFICER,
-        processing_minutes=DOCUMENT_VERIFICATION_MINUTES,
+        processing_minutes=REGISTRY_CHECK_MINUTES,
         description=(
-            "An officer checks the admission letter, identity document, "
-            "and prerequisite record."
+            "A registry officer checks the student ID and confirms the "
+            "programme: Computer Science, Business Information Technology, "
+            "or Business Administration."
         ),
     ),
     ActivitySpec(
-        activity_id=ActivityId.COURSE_ENROLMENT,
-        label="Course enrolment",
-        short_label="Enrolment",
+        activity_id=ActivityId.PORTAL_REGISTRATION,
+        label="Student Portal registration",
+        short_label="Portal",
         resource_kind=ResourceKind.COMPUTER,
-        processing_minutes=COURSE_ENROLMENT_MINUTES,
+        processing_minutes=PORTAL_REGISTRATION_MINUTES,
         description=(
-            "The student enters course selections on a registration computer "
-            "and writes them to the student information system."
+            "The student registers semester courses on a Student Portal "
+            "computer at the registry desk."
         ),
     ),
     ActivitySpec(
-        activity_id=ActivityId.FEE_ASSESSMENT,
-        label="Fee assessment",
-        short_label="Fees",
+        activity_id=ActivityId.TIMETABLE_ISSUE,
+        label="Timetable issue",
+        short_label="Timetable",
         resource_kind=ResourceKind.OFFICER,
-        processing_minutes=FEE_ASSESSMENT_MINUTES,
+        processing_minutes=TIMETABLE_ISSUE_MINUTES,
         description=(
-            "An officer calculates tuition, applies a recorded waiver or "
-            "scholarship, and confirms the payment entry."
-        ),
-    ),
-    ActivitySpec(
-        activity_id=ActivityId.CARD_ISSUE,
-        label="Card and timetable",
-        short_label="Card",
-        resource_kind=ResourceKind.COMPUTER,
-        processing_minutes=CARD_ISSUE_MINUTES,
-        description=(
-            "A registration computer prints the timetable and encodes the "
-            "student card."
+            "The officer confirms the course list and issues the printed timetable."
         ),
     ),
 )

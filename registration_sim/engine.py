@@ -1,6 +1,6 @@
 """Discrete-event engine for a deterministic registration hall.
 
-Students arrive on a fixed interval and walk four activities in order.
+Students arrive on a fixed interval and walk the registry activities in order.
 Each activity seizes the lowest-numbered free unit of its resource and
 holds that unit, without interruption, for a known processing time.
 
@@ -41,9 +41,9 @@ def validate_config(config: SimulationConfig) -> None:
     if config.interarrival_minutes < ZERO_MINUTES:
         raise ConfigurationError("Interarrival time cannot be negative.")
     if config.officer_count < MIN_RESOURCE_UNITS:
-        raise ConfigurationError("The hall needs at least one registration officer.")
+        raise ConfigurationError("The desk needs at least one registry officer.")
     if config.computer_count < MIN_RESOURCE_UNITS:
-        raise ConfigurationError("The hall needs at least one registration computer.")
+        raise ConfigurationError("The desk needs at least one Student Portal computer.")
     if config.working_period_minutes < ZERO_MINUTES:
         raise ConfigurationError("The working period cannot be negative.")
 

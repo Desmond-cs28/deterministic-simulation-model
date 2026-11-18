@@ -29,15 +29,15 @@ export function LabControls({ draft, applied, status, on_change, on_run, on_scen
         on_run()
       }}
     >
-      <h3 className="font-heading text-2xl">Staff the hall</h3>
+      <h3 className="font-heading text-2xl">Staff the desk</h3>
       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-        The single run below uses these counts. The experiment table keeps the same cohort and session, and swaps only the officer and computer pools.
+        The schedule below uses these counts. The three experiments keep the same students and the same morning, and change only the officer or the computer.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <Field
           id="student_count"
           label="Students in the cohort"
-          hint="Use 0 to see the empty hall."
+          hint="Use 0 to see an empty morning."
           value={draft.student_count}
           on_change={(value) => on_change("student_count", value)}
         />
@@ -51,14 +51,14 @@ export function LabControls({ draft, applied, status, on_change, on_run, on_scen
         <Field
           id="officer_count"
           label="Registration officers"
-          hint="Shared by documents and fees."
+          hint="Shared by the registry check and the timetable."
           value={draft.officer_count}
           on_change={(value) => on_change("officer_count", value)}
         />
         <Field
           id="computer_count"
-          label="Registration computers"
-          hint="Shared by enrolment and card issue."
+          label="Student Portal computers"
+          hint="Used for course registration."
           value={draft.computer_count}
           on_change={(value) => on_change("computer_count", value)}
         />
@@ -71,7 +71,7 @@ export function LabControls({ draft, applied, status, on_change, on_run, on_scen
         />
       </div>
       <Button type="submit" className="mt-4 h-10 cursor-pointer px-4" disabled={running}>
-        {running ? "Scheduling the hall…" : "Run simulation"}
+        {running ? "Scheduling the desk…" : "Run simulation"}
       </Button>
       <div className="mt-5">
         <p className="text-xs tracking-wide text-muted-foreground uppercase">Load a study allocation</p>

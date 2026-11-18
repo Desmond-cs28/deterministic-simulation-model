@@ -15,14 +15,13 @@ export function KpiGrid({ metrics }: { metrics: SimulationMetrics }) {
       <Kpi
         label="Finished in session"
         value={format_count(metrics.students_finished_within_period, metrics.students_processed)}
-        note={`${metrics.students_unfinished_within_period} still in the hall at close`}
+        note={`${metrics.students_unfinished_within_period} still at the desk at close`}
       />
       <Kpi label="Officer utilisation" value={format_percent(metrics.officer_utilisation)} note={`${metrics.officer_idle_minutes} idle min`} />
       <Kpi label="Computer utilisation" value={format_percent(metrics.computer_utilisation)} note={`${metrics.computer_idle_minutes} idle min`} />
       <Kpi label="Idle resource-minutes" value={String(metrics.overall_idle_minutes)} note={`${format_percent(metrics.overall_utilisation)} overall utilisation`} />
-      <Kpi label="Average wait" value={`${format_one_decimal(metrics.average_waiting_minutes)} min`} note={`Peak in hall: ${metrics.peak_students_in_system}`} />
-      <Kpi label="Service efficiency" value={format_percent(metrics.service_efficiency)} note="Processing ÷ (processing + waiting)" />
-      <Kpi label="Schedule efficiency" value={format_percent(metrics.schedule_efficiency)} note={`Lower bound ${metrics.lower_bound_minutes} min`} />
+      <Kpi label="Average wait" value={`${format_one_decimal(metrics.average_waiting_minutes)} min`} note={`Most students at the desk at once: ${metrics.peak_students_in_system}`} />
+      <Kpi label="System efficiency" value={format_percent(metrics.service_efficiency)} note="Time being served, out of time at the desk" />
     </div>
   )
 }

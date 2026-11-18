@@ -3,8 +3,6 @@
 from dataclasses import replace
 
 from registration_sim.constants import (
-    BALANCED_COMPUTER_COUNT,
-    BALANCED_OFFICER_COUNT,
     BASELINE_COMPUTER_COUNT,
     BASELINE_OFFICER_COUNT,
     DEFAULT_COMPUTER_COUNT,
@@ -12,11 +10,7 @@ from registration_sim.constants import (
     DEFAULT_OFFICER_COUNT,
     DEFAULT_STUDENT_COUNT,
     DEFAULT_WORKING_PERIOD_MINUTES,
-    EXPANDED_COMPUTER_COUNT,
-    EXPANDED_OFFICER_COUNT,
     INDEX_STEP,
-    LEAN_COMPUTER_COUNT,
-    LEAN_OFFICER_COUNT,
     MORE_COMPUTERS_COMPUTER_COUNT,
     MORE_COMPUTERS_OFFICER_COUNT,
     MORE_OFFICERS_COMPUTER_COUNT,
@@ -42,60 +36,34 @@ def default_config() -> SimulationConfig:
 
 
 def study_scenarios() -> tuple[Scenario, ...]:
-    """Five allocations. The first three are the required contrast.
+    """Three allocations for one morning at the Palm registry desk.
 
-    Baseline, officers increased alone, and computers increased alone
-    answer the resource question. The balanced mix follows the officer
-    and computer work ratio. The expanded mix doubles both pools.
+    The current desk, a second officer, and a second portal computer.
     """
     return (
         Scenario(
             scenario_id=ScenarioId.BASELINE,
-            name="Baseline hall",
-            short_label="Baseline 2+2",
-            summary="Two officers and two computers, the current North Hall staffing.",
+            name="Current desk",
+            short_label="Desk 1+1",
+            summary="One registry officer and one Student Portal computer.",
             officer_count=BASELINE_OFFICER_COUNT,
             computer_count=BASELINE_COMPUTER_COUNT,
         ),
         Scenario(
             scenario_id=ScenarioId.MORE_OFFICERS,
-            name="Extra officers",
-            short_label="Officers 4+2",
-            summary="Four officers, still with two computers.",
+            name="Second officer",
+            short_label="Officers 2+1",
+            summary="Two registry officers, still with one portal computer.",
             officer_count=MORE_OFFICERS_OFFICER_COUNT,
             computer_count=MORE_OFFICERS_COMPUTER_COUNT,
         ),
         Scenario(
-            scenario_id=ScenarioId.LEAN,
-            name="Lean computer step",
-            short_label="Lean 2+3",
-            summary="Two officers and three computers, one extra terminal on the baseline hall.",
-            officer_count=LEAN_OFFICER_COUNT,
-            computer_count=LEAN_COMPUTER_COUNT,
-        ),
-        Scenario(
             scenario_id=ScenarioId.MORE_COMPUTERS,
-            name="Extra computers",
-            short_label="Computers 2+4",
-            summary="Two officers, with the computer pool raised to four.",
+            name="Second computer",
+            short_label="Computers 1+2",
+            summary="One registry officer, with a second Student Portal computer.",
             officer_count=MORE_COMPUTERS_OFFICER_COUNT,
             computer_count=MORE_COMPUTERS_COMPUTER_COUNT,
-        ),
-        Scenario(
-            scenario_id=ScenarioId.BALANCED,
-            name="Work-balanced mix",
-            short_label="Balanced 3+4",
-            summary="Three officers and four computers, close to the 11:14 work ratio.",
-            officer_count=BALANCED_OFFICER_COUNT,
-            computer_count=BALANCED_COMPUTER_COUNT,
-        ),
-        Scenario(
-            scenario_id=ScenarioId.EXPANDED,
-            name="Both pools doubled",
-            short_label="Doubled 4+4",
-            summary="Four officers and four computers.",
-            officer_count=EXPANDED_OFFICER_COUNT,
-            computer_count=EXPANDED_COMPUTER_COUNT,
         ),
     )
 

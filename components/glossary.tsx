@@ -1,39 +1,27 @@
 const TERMS = [
   {
     term: "Students processed",
-    meaning: "Every student who completes all four activities. In this model the hall stays open until the cohort is done, so this equals the cohort size.",
+    meaning: "Students who finish the registry check, the Student Portal, and the timetable. The desk stays open until the last student is done, so this equals the morning's group.",
   },
   {
     term: "Finished in session",
-    meaning: "Students whose card is issued at or before the session length. The rest are still in the hall when the working period ends.",
+    meaning: "Students who have their timetable at or before the desk closes. The rest are still waiting or being served when the session ends.",
   },
   {
     term: "Makespan",
-    meaning: "Minutes from opening until the last student finishes. This is the total time required to complete registration.",
+    meaning: "Minutes from 08:00 until the last student leaves. This is the total time the morning takes.",
   },
   {
     term: "Overtime",
-    meaning: "Makespan minus the session length, when the makespan is longer. Zero means the cohort is clear before the close.",
+    meaning: "How many minutes the last student finishes after the desk was meant to close. Zero means everyone is done on time.",
   },
   {
     term: "Utilisation",
-    meaning: "Busy minutes divided by units × makespan. Officer busy time is fixed for a cohort (every student needs the same officer minutes); utilisation falls when you add units or when the day grows.",
+    meaning: "The share of the morning an officer or a computer is actually serving a student. Adding a person or a machine that has little to do lowers this.",
   },
   {
     term: "Idle time",
-    meaning: "Resource-minutes when a unit is not serving a student, from opening until the makespan. Gaps on the timeline are idle time.",
-  },
-  {
-    term: "Service efficiency",
-    meaning: "Total processing minutes divided by processing plus student waiting. It is the share of a student's time in the hall that is spent being served.",
-  },
-  {
-    term: "Schedule efficiency",
-    meaning: "A lower bound on the makespan divided by the makespan actually achieved. It shows how close the dispatch rule comes to the best time that resource limits allow.",
-  },
-  {
-    term: "Efficiency score",
-    meaning: "The fraction of the cohort finished inside the session, multiplied by overall utilisation. The study ranks allocations by students finished, then by this utilisation, so the winner clears the morning without spare desks sitting idle.",
+    meaning: "Minutes an officer or a computer is free while the desk is still open. Gaps on the timeline are idle time.",
   },
 ] as const
 

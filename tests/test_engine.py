@@ -2,13 +2,12 @@
 
 from registration_sim.activities import processing_minutes_for, total_processing_minutes
 from registration_sim.constants import (
-    CARD_ISSUE_MINUTES,
-    COURSE_ENROLMENT_MINUTES,
-    DOCUMENT_VERIFICATION_MINUTES,
     EMPTY_COUNT,
-    FEE_ASSESSMENT_MINUTES,
     FIRST_INDEX,
     FULL_RATIO,
+    PORTAL_REGISTRATION_MINUTES,
+    REGISTRY_CHECK_MINUTES,
+    TIMETABLE_ISSUE_MINUTES,
     ZERO_MINUTES,
     ActivityId,
     ResourceKind,
@@ -26,17 +25,14 @@ ONE_UNIT = 1
 OPEN_ARRIVAL = 0
 WIDE_GAP_MINUTES = 100
 SESSION_MINUTES = 240
-HAND_MAKESPAN_TWO = 35
-HAND_WAIT_FIRST = 5
-HAND_WAIT_SECOND = 10
-HAND_OFFICER_BUSY = 22
-HAND_COMPUTER_BUSY = 28
-HAND_LOWER_BOUND = 28
+HAND_MAKESPAN_TWO = 34
+HAND_WAIT_FIRST = 0
+HAND_WAIT_SECOND = 12
+HAND_OFFICER_BUSY = 20
+HAND_COMPUTER_BUSY = 24
+HAND_LOWER_BOUND = 24
 CHAIN_MINUTES = (
-    DOCUMENT_VERIFICATION_MINUTES
-    + COURSE_ENROLMENT_MINUTES
-    + FEE_ASSESSMENT_MINUTES
-    + CARD_ISSUE_MINUTES
+    REGISTRY_CHECK_MINUTES + PORTAL_REGISTRATION_MINUTES + TIMETABLE_ISSUE_MINUTES
 )
 
 
@@ -58,16 +54,14 @@ def test_single_student_has_no_wait_and_known_finish() -> None:
     assert student.completion_minutes == CHAIN_MINUTES
     ends = [stage.end_minutes for stage in student.stages]
     assert ends == [
-        DOCUMENT_VERIFICATION_MINUTES,
-        DOCUMENT_VERIFICATION_MINUTES + COURSE_ENROLMENT_MINUTES,
-        DOCUMENT_VERIFICATION_MINUTES + COURSE_ENROLMENT_MINUTES + FEE_ASSESSMENT_MINUTES,
+        REGISTRY_CHECK_MINUTES,
+        REGISTRY_CHECK_MINUTES + PORTAL_REGISTRATION_MINUTES,
         CHAIN_MINUTES,
     ]
     assert [stage.activity_id for stage in student.stages] == [
-        ActivityId.DOCUMENT_VERIFICATION,
-        ActivityId.COURSE_ENROLMENT,
-        ActivityId.FEE_ASSESSMENT,
-        ActivityId.CARD_ISSUE,
+        ActivityId.REGISTRY_CHECK,
+        ActivityId.PORTAL_REGISTRATION,
+        ActivityId.TIMETABLE_ISSUE,
     ]
 
 
@@ -78,8 +72,8 @@ def test_two_students_one_unit_each_match_the_hand_schedule() -> None:
     assert result.makespan_minutes == HAND_MAKESPAN_TWO
     assert first.waiting_minutes == HAND_WAIT_FIRST
     assert second.waiting_minutes == HAND_WAIT_SECOND
-    assert [stage.start_minutes for stage in first.stages] == [0, 6, 16, 26]
-    assert [stage.start_minutes for stage in second.stages] == [6, 16, 26, 31]
+    assert [stage.start_minutes for stage in first.stages] == [0, 6, 18]
+    assert [stage.start_minutes for stage in second.stages] == [6, 18, 30]
     assert metrics.officer_busy_minutes == HAND_OFFICER_BUSY
     assert metrics.computer_busy_minutes == HAND_COMPUTER_BUSY
     assert metrics.officer_idle_minutes == HAND_MAKESPAN_TWO - HAND_OFFICER_BUSY
@@ -167,25 +161,19 @@ def test_missing_resource_is_rejected() -> None:
     assert rejected
 
 
-def test_default_study_finds_the_lean_mix_most_efficient() -> None:
+def test_default_study_prefers_the_second_computer() -> None:
     runs = run_study()
     chosen = recommend(runs)
     by_id = {run.scenario.scenario_id: run for run in runs}
     baseline = by_id[ScenarioId.BASELINE]
     more_officers = by_id[ScenarioId.MORE_OFFICERS]
-    lean = by_id[ScenarioId.LEAN]
     more_computers = by_id[ScenarioId.MORE_COMPUTERS]
-    balanced = by_id[ScenarioId.BALANCED]
-    expanded = by_id[ScenarioId.EXPANDED]
-    assert chosen.scenario.scenario_id == ScenarioId.LEAN
+    assert chosen.scenario.scenario_id == ScenarioId.MORE_COMPUTERS
     assert more_officers.metrics.makespan_minutes == baseline.metrics.makespan_minutes
-    assert lean.metrics.makespan_minutes < baseline.metrics.makespan_minutes
-    assert more_computers.metrics.makespan_minutes == lean.metrics.makespan_minutes
-    assert lean.metrics.students_finished_within_period == lean.metrics.students_processed
-    assert balanced.metrics.students_finished_within_period == balanced.metrics.students_processed
-    assert lean.metrics.efficiency_score > balanced.metrics.efficiency_score
-    assert balanced.metrics.makespan_minutes < lean.metrics.makespan_minutes
-    assert expanded.metrics.average_waiting_minutes < balanced.metrics.average_waiting_minutes
+    assert more_computers.metrics.makespan_minutes < baseline.metrics.makespan_minutes
+    assert more_computers.metrics.students_finished_within_period == more_computers.metrics.students_processed
+    assert baseline.metrics.overtime_minutes > ZERO_MINUTES
+    assert more_computers.metrics.overtime_minutes == ZERO_MINUTES
 
 
 def test_default_study_recommends_a_member_and_ranks_by_the_rule() -> None:

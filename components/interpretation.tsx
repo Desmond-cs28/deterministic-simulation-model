@@ -13,11 +13,11 @@ export function Interpretation({
     <SectionBlock
       id="reading"
       kicker="Reading"
-      title="Which allocation earns its desks"
-      lede="Efficiency here means clearing as many students as possible before the session closes, then keeping officers and computers busy. A larger pool is preferred only when the extra time it consumes is paid back."
+      title="Which desk to staff"
+      lede="The better allocation is the one that finishes more students before the desk closes. When two allocations finish the same number, the one that keeps the officer and the computer busier is the more efficient."
     >
       <div className="rounded-xl bg-secondary px-5 py-5 text-secondary-foreground">
-        <p className="font-mono text-[0.72rem] tracking-[0.16em] text-[#f0d3a2] uppercase">
+        <p className="font-mono text-[0.72rem] tracking-[0.16em] text-[#d7ebe3] uppercase">
           Most efficient in this study
         </p>
         <p className="font-heading mt-2 text-3xl tracking-tight">{recommended.scenario.name}</p>

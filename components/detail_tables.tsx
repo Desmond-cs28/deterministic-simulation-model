@@ -61,7 +61,7 @@ export function DetailTables({ result, metrics }: { result: SimulationResult; me
       <div className="rounded-xl bg-card p-4 ring-1 ring-foreground/10 lg:col-span-2">
         <h3 className="font-heading text-xl">Students</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          {metrics.students_processed} processed. A student counts as finished in the session when the card is issued at or before the close.
+          {metrics.students_processed} processed. A student counts as finished in the session when the timetable is issued at or before the close.
         </p>
         <div className="mt-3 max-h-96 overflow-auto">
           <Table>

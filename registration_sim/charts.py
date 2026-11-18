@@ -17,15 +17,15 @@ from registration_sim.constants import (
 )
 from registration_sim.model import ScenarioRun
 
-INK = "#1c1915"
-TEAL = "#0e6b62"
-NAVY = "#243044"
-RUST = "#b4492a"
-PAPER = "#fbf7ef"
-GRID = "#e4dccf"
-AMBER = "#c4922a"
-BAND = "#efe6d6"
-LINE_COLORS = (TEAL, NAVY, RUST, AMBER, "#6b4c9a", "#3d6b4f")
+INK = "#14241c"
+TEAL = "#02553C"
+NAVY = "#013326"
+RUST = "#3d8f6e"
+PAPER = "#ffffff"
+GRID = "#d5e4db"
+AMBER = "#c4a35a"
+BAND = "#d7ebe3"
+LINE_COLORS = (TEAL, NAVY, RUST, AMBER)
 
 
 def _style_axis(axis: plt.Axes) -> None:
@@ -64,7 +64,7 @@ def save_makespan_chart(
     axis.bar(positions, values, color=TEAL, width=0.72)
     axis.axhline(session_minutes, color=RUST, linewidth=1.4, linestyle="--")
     axis.set_xticks(positions, labels)
-    axis.set_ylabel("Minutes from hall opening")
+    axis.set_ylabel("Minutes from 08:00")
     axis.set_title("Makespan against the morning session")
     axis.legend(
         handles=[
@@ -156,7 +156,6 @@ def save_sensitivity_chart(runs: tuple[ScenarioRun, ...] | list[ScenarioRun], pa
 
 def save_study_charts(
     study: tuple[ScenarioRun, ...] | list[ScenarioRun],
-    sensitivity: tuple[ScenarioRun, ...] | list[ScenarioRun],
     output_dir: Path,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -165,10 +164,8 @@ def save_study_charts(
         output_dir / FIGURE_MAKESPAN,
         output_dir / FIGURE_UTILISATION,
         output_dir / FIGURE_COMPLETIONS,
-        output_dir / FIGURE_SENSITIVITY,
     ]
     save_makespan_chart(study, session_minutes, targets[0])
     save_utilisation_chart(study, targets[1])
     save_completion_chart(study, targets[2])
-    save_sensitivity_chart(sensitivity, targets[3])
     return targets

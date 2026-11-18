@@ -41,10 +41,10 @@ export function validate_config(config: SimulationConfig): void {
     throw new ConfigurationError("Interarrival time cannot be negative.")
   }
   if (config.officer_count < MIN_RESOURCE_UNITS) {
-    throw new ConfigurationError("The hall needs at least one registration officer.")
+    throw new ConfigurationError("The desk needs at least one registry officer.")
   }
   if (config.computer_count < MIN_RESOURCE_UNITS) {
-    throw new ConfigurationError("The hall needs at least one registration computer.")
+    throw new ConfigurationError("The desk needs at least one Student Portal computer.")
   }
   if (config.working_period_minutes < ZERO_MINUTES) {
     throw new ConfigurationError("The working period cannot be negative.")

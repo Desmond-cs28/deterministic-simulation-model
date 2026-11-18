@@ -47,7 +47,7 @@ export function ExperimentCharts({ runs, session_minutes }: { runs: ScenarioRun[
           </BarChart>
         </ResponsiveContainer>
       </ChartCard>
-      <ChartCard title="Utilisation of each pool" note="A tall computer bar beside a short officer bar means the terminals are the scarce resource.">
+      <ChartCard title="Utilisation of each pool" note="The taller bar is the busier pool on that morning.">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={rows} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
             <CartesianGrid vertical={false} stroke={GRID} />

@@ -96,7 +96,7 @@ function main(): void {
   }
 
   const chosen = recommend(run_study(default_config()))
-  if (chosen.scenario.scenario_id !== ScenarioId.LEAN) {
+  if (chosen.scenario.scenario_id !== ScenarioId.MORE_COMPUTERS) {
     failures += INDEX_STEP
     console.error(`Recommendation ${chosen.scenario.scenario_id}`)
   }

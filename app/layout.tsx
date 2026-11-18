@@ -20,9 +20,9 @@ const mono_font = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "North Hall registration simulator",
+  title: "Palm University College registration desk",
   description:
-    "Deterministic discrete-event simulation of a university registration centre. Compare officer and computer allocations, utilisation, idle time, and session efficiency.",
+    "A deterministic simulation of one morning of course registration at Palm University College, Manya Jorpanya.",
 }
 
 export default function RootLayout({

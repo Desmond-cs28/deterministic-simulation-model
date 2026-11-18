@@ -18,7 +18,6 @@ import { LabControls } from "./lab_controls"
 import { Masthead } from "./masthead"
 import { ResourceGantt } from "./resource_gantt"
 import { SectionBlock } from "./section_block"
-import { SensitivityPanel } from "./sensitivity_panel"
 
 const LAB_ANCHOR = "lab"
 
@@ -76,7 +75,7 @@ export function RegistrationLab() {
           id={LAB_ANCHOR}
           kicker="A single run"
           title="Schedule this morning"
-          lede="Change the cohort or the staffing, then run the hall. The timeline, the resource table, and the student list all describe that one schedule."
+          lede="Change the morning's students or the desk, then run it. The timeline and the tables describe that one schedule."
         >
           <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
             <LabControls
@@ -94,7 +93,7 @@ export function RegistrationLab() {
                 </p>
               ) : null}
               {running ? (
-                <p className="mb-3 font-mono text-xs tracking-[0.14em] text-primary uppercase">Scheduling the hall…</p>
+                <p className="mb-3 font-mono text-xs tracking-[0.14em] text-primary uppercase">Scheduling the desk…</p>
               ) : null}
               {cohort_empty ? <EmptyHall /> : <KpiGrid metrics={model.metrics} />}
             </div>
@@ -112,21 +111,12 @@ export function RegistrationLab() {
           session_minutes={applied.working_period_minutes}
           on_open={(run) => on_scenario(run.scenario)}
         />
-        <SensitivityPanel
-          cells={model.sensitivity}
-          session_minutes={applied.working_period_minutes}
-          applied_officers={applied.officer_count}
-          applied_computers={applied.computer_count}
-          best_officers={model.best_cell.officer_count}
-          best_computers={model.best_cell.computer_count}
-          on_select={apply_counts}
-        />
         <Interpretation paragraphs={model.paragraphs} recommended={model.recommended} />
         <Glossary />
       </main>
       <footer className="border-t border-foreground/10 px-4 py-8 text-sm text-muted-foreground sm:px-6">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <p>North Hall registration model. Same inputs, same schedule.</p>
+          <p>Palm University College · registry desk. Same inputs, same schedule.</p>
           <p className="font-mono text-xs">python -m registration_sim</p>
         </div>
       </footer>
@@ -139,7 +129,7 @@ function EmptyHall() {
     <div className="flex h-full min-h-48 flex-col justify-center rounded-xl border border-dashed border-foreground/20 bg-card px-5 py-8">
       <h3 className="font-heading text-2xl">The cohort is empty</h3>
       <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-        Set the student count to at least one and run the simulation. With nobody to register, makespan, waiting, and utilisation are all zero.
+        Set the student count to at least one and run the simulation. With nobody to register, the desk stays idle and every measure is zero.
       </p>
     </div>
   )
