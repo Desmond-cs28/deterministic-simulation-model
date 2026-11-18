@@ -1,4 +1,4 @@
-Scenario,Officers,Computers,Makespan,In session,Processed,Overtime,Officer util.,Computer util.,Overall util.,Idle min.,Avg wait,Service eff.,Schedule eff.,Score
-Desk 1+1,1,1,250,19,20,10,80.0%,96.0%,88.0%,60,43.4,33.6%,96.0%,0.836
-Officers 2+1,2,1,250,19,20,10,40.0%,96.0%,58.7%,310,38.0,36.7%,96.0%,0.557
-Computers 1+2,1,2,204,20,20,0,98.0%,58.8%,71.9%,172,26.6,45.3%,98.0%,0.719
+Scenario,Officers,Computers,Total time,Finished,Processed,Overtime,Officer use,Computer use,Overall use,Idle min.,Avg wait,System efficiency
+Desk 1+1,1,1,250,19,20,10,80.0%,96.0%,88.0%,60,43.4,33.6%
+Officers 2+1,2,1,250,19,20,10,40.0%,96.0%,58.7%,310,38.0,36.7%
+Computers 1+2,1,2,204,20,20,0,98.0%,58.8%,71.9%,172,26.6,45.3%

@@ -10,10 +10,8 @@ import matplotlib.pyplot as plt
 from registration_sim.constants import (
     FIGURE_COMPLETIONS,
     FIGURE_MAKESPAN,
-    FIGURE_SENSITIVITY,
     FIGURE_UTILISATION,
     PERCENT_SCALE,
-    SENSITIVITY_MIN_UNITS,
 )
 from registration_sim.model import ScenarioRun
 
@@ -24,8 +22,6 @@ RUST = "#3d8f6e"
 PAPER = "#ffffff"
 GRID = "#d5e4db"
 AMBER = "#c4a35a"
-BAND = "#d7ebe3"
-LINE_COLORS = (TEAL, NAVY, RUST, AMBER)
 
 
 def _style_axis(axis: plt.Axes) -> None:
@@ -114,42 +110,6 @@ def save_completion_chart(runs: tuple[ScenarioRun, ...] | list[ScenarioRun], pat
         frameon=False,
     )
     figure.tight_layout()
-    figure.savefig(path)
-    plt.close(figure)
-
-
-def save_sensitivity_chart(runs: tuple[ScenarioRun, ...] | list[ScenarioRun], path: Path) -> None:
-    figure, axis = _new_figure()
-    by_computers: dict[int, list[ScenarioRun]] = {}
-    for run in runs:
-        count = run.scenario.computer_count
-        by_computers.setdefault(count, []).append(run)
-    for offset, computer_count in enumerate(sorted(by_computers)):
-        series = sorted(by_computers[computer_count], key=lambda run: run.scenario.officer_count)
-        axis.plot(
-            [run.scenario.officer_count for run in series],
-            [run.metrics.makespan_minutes for run in series],
-            color=LINE_COLORS[offset % len(LINE_COLORS)],
-            marker="o",
-            linewidth=1.8,
-            label=(
-                f"{computer_count} computer"
-                if computer_count == SENSITIVITY_MIN_UNITS
-                else f"{computer_count} computers"
-            ),
-        )
-    axis.set_xlabel("Registration officers")
-    axis.set_ylabel("Makespan (minutes)")
-    axis.set_title("Makespan as officers and computers increase")
-    axis.set_xticks(list(range(SENSITIVITY_MIN_UNITS, max(by_computers) + 1)))
-    axis.legend(
-        frameon=False,
-        ncol=3,
-        loc="upper center",
-        bbox_to_anchor=(0.5, -0.18),
-    )
-    figure.tight_layout()
-    figure.subplots_adjust(bottom=0.22)
     figure.savefig(path)
     plt.close(figure)
 

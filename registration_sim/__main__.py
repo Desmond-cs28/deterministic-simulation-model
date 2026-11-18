@@ -2,14 +2,12 @@
 
 Examples
 --------
-python -m registration_sim
-python -m registration_sim --students 20 --officers 1 --computers 2
-python -m registration_sim --charts output/figures
+python registration.py
+python registration.py --students 20 --officers 1 --computers 2
 """
 
 import argparse
 import csv
-import json
 from pathlib import Path
 
 from registration_sim.activities import processing_minutes_for, total_processing_minutes
@@ -17,23 +15,20 @@ from registration_sim.charts import save_study_charts
 from registration_sim.constants import (
     COMPARISON_CSV,
     DEFAULT_COMPUTER_COUNT,
+    DEFAULT_FIGURE_DIRECTORY,
     DEFAULT_INTERARRIVAL_MINUTES,
     DEFAULT_OFFICER_COUNT,
     DEFAULT_STUDENT_COUNT,
     DEFAULT_WORKING_PERIOD_MINUTES,
     MIN_RESOURCE_UNITS,
+    PERCENT_SCALE,
     ResourceKind,
 )
 from registration_sim.engine import simulate
-from registration_sim.experiments import (
-    default_config,
-    recommend,
-    run_study,
-)
+from registration_sim.experiments import recommend, run_study
 from registration_sim.metrics import measure
 from registration_sim.model import SimulationConfig
 from registration_sim.narrative import study_paragraphs
-from registration_sim.serialize import run_payload
 from registration_sim.tables import (
     COMPARISON_HEADERS,
     activity_table,
@@ -56,14 +51,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--charts",
         type=Path,
-        default=None,
-        help="Directory for PNG figures and the comparison CSV.",
-    )
-    parser.add_argument(
-        "--export-parity",
-        type=Path,
-        default=None,
-        help="Write a JSON fixture the web lab uses to check its engine.",
+        default=Path(DEFAULT_FIGURE_DIRECTORY),
+        help="Directory for the PNG graphs and the comparison table.",
     )
     return parser
 
@@ -76,41 +65,6 @@ def config_from_args(args: argparse.Namespace) -> SimulationConfig:
         computer_count=args.computers,
         working_period_minutes=args.session,
     )
-
-
-def export_parity(path: Path) -> None:
-    """Small hand cases plus the default study, including the full trace."""
-    cases = [
-        SimulationConfig(1, 0, 1, 1, 240),
-        SimulationConfig(2, 0, 1, 1, 240),
-        SimulationConfig(3, 100, 1, 1, 240),
-        default_config(),
-    ]
-    payloads: list[dict[str, object]] = []
-    for config in cases:
-        result = simulate(config)
-        from registration_sim.experiments import Scenario
-        from registration_sim.constants import ScenarioId
-
-        scenario = Scenario(
-            scenario_id=ScenarioId.BASELINE,
-            name="parity",
-            short_label="parity",
-            summary="parity",
-            officer_count=config.officer_count,
-            computer_count=config.computer_count,
-        )
-        from registration_sim.model import ScenarioRun
-
-        run = ScenarioRun(scenario=scenario, result=result, metrics=measure(result))
-        payloads.append(run_payload(run, include_assignments=True))
-
-    study = run_study(default_config())
-    for run in study:
-        payloads.append(run_payload(run, include_assignments=True))
-
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payloads, indent=2), encoding="utf-8")
 
 
 def write_csv(path: Path, runs: tuple) -> None:
@@ -128,11 +82,6 @@ def _unit_label(count: int, singular: str, plural: str) -> str:
 
 def main() -> None:
     args = build_parser().parse_args()
-    if args.export_parity is not None:
-        export_parity(args.export_parity)
-        print(f"Wrote {args.export_parity}")
-        return
-
     config = config_from_args(args)
     single = simulate(config)
     single_metrics = measure(single)
@@ -141,53 +90,61 @@ def main() -> None:
 
     officer_work = processing_minutes_for(ResourceKind.OFFICER)
     computer_work = processing_minutes_for(ResourceKind.COMPUTER)
-    print("Palm University College — course registration desk")
+    print("Palm University College — deterministic course-registration simulation")
     print(
         f"Each student: {total_processing_minutes()} minutes "
         f"({officer_work} with an officer, {computer_work} on a computer)."
     )
     print()
-    print("Activities")
+    print("Resources and processing times")
     print(activity_table())
     print()
     print(
-        f"Single run: {config.student_count} students, "
+        f"Simulation: {config.student_count} students, "
         f"every {config.interarrival_minutes} min, "
         f"{_unit_label(config.officer_count, 'officer', 'officers')}, "
         f"{_unit_label(config.computer_count, 'computer', 'computers')}, "
         f"session {config.working_period_minutes} min."
     )
-    print(f"Makespan: {single_metrics.makespan_minutes} min")
+    print(f"Total time: {single_metrics.makespan_minutes} min")
+    print(f"Students processed: {single_metrics.students_processed}")
     print(
-        f"Finished in session: {single_metrics.students_finished_within_period}"
+        f"Finished in the working period: {single_metrics.students_finished_within_period}"
         f" / {single_metrics.students_processed}"
     )
     print(f"Overtime: {single_metrics.overtime_minutes} min")
-    print(f"Total waiting: {single_metrics.total_waiting_minutes} min")
-    print(f"Idle resource-minutes: {single_metrics.overall_idle_minutes}")
+    print(f"Idle time: {single_metrics.overall_idle_minutes} resource-minutes")
+    print(
+        "System efficiency: "
+        f"{single_metrics.service_efficiency * PERCENT_SCALE:.1f}% "
+        "(time being served, out of time at the desk)"
+    )
     print()
-    print("Resources")
+    print("Resource utilisation")
     print(resource_table(single_metrics))
     print()
-    print("Stages")
+    print("Waiting at each activity")
     print(stage_table(single_metrics))
     print()
-    print("Resource-allocation experiments")
+    print("Experiments: current desk, one more officer, one more computer")
     print(comparison_table(study))
     print()
-    print(f"Recommended allocation: {recommended.scenario.name}")
+    print(f"Most efficient allocation: {recommended.scenario.name}")
+    print(
+        f"{_unit_label(recommended.scenario.officer_count, 'officer', 'officers')}, "
+        f"{_unit_label(recommended.scenario.computer_count, 'computer', 'computers')}."
+    )
     print()
     for paragraph in study_paragraphs(study, recommended):
         print(paragraph)
         print()
 
-    if args.charts is not None:
-        figures = save_study_charts(study, args.charts)
-        csv_path = args.charts / COMPARISON_CSV
-        write_csv(csv_path, study)
-        for figure in figures:
-            print(f"Wrote {figure}")
-        print(f"Wrote {csv_path}")
+    figures = save_study_charts(study, args.charts)
+    csv_path = args.charts / COMPARISON_CSV
+    write_csv(csv_path, study)
+    for figure in figures:
+        print(f"Wrote {figure}")
+    print(f"Wrote {csv_path}")
 
 
 if __name__ == "__main__":

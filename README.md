@@ -1,61 +1,61 @@
-# Palm University College registration desk
+# Palm University College registration simulation
 
-A deterministic simulation of one morning of undergraduate course registration at Palm University College, Manya Jorpanya. Arrivals, processing times, and the number of officers and computers are fixed, so the same inputs always produce the same schedule.
+A deterministic Python simulation of one morning of undergraduate course registration at Palm University College, Manya Jorpanya. Student arrivals, processing times, and the number of officers and computers are fixed, so the same inputs always produce the same schedule.
 
-The Python program is the simulation. The web page runs the same model and draws the timeline, the comparison table, and the graphs.
+The whole solution is Python. Matplotlib draws the graphs.
 
-## The morning
+## What the model represents
 
-The college calendar sets undergraduate course registration for a short week (31 August to 4 September 2026 for the first cohort). The college has a little over 100 undergraduates, so one morning at the Registry is a group of 20. They are booked every 8 minutes from 08:00. The desk is meant to close at 12:00, which is 240 minutes.
+The college calendar sets course registration for a short week. About 100 undergraduates share that week, so one morning at the Registry is 20 students. They arrive every 8 minutes from 08:00. The desk is open for 240 minutes, until 12:00.
 
-Each student takes three steps:
+Each student takes the same three steps:
 
-| Step | Resource | Minutes |
+| Activity | Resource | Minutes |
 | --- | --- | --- |
-| Registry check | Registry officer | 6 |
+| Registry check | Registration officer | 6 |
 | Student Portal course registration | Computer | 12 |
-| Timetable issue | Registry officer | 4 |
+| Timetable issue | Registration officer | 4 |
 
-That is 10 minutes with an officer and 12 minutes on a computer. The officer handles both the check and the timetable. The computer is only for the Student Portal. A student moves to the next queue as soon as a step ends, so the officer can call the next student while an earlier student is still on the computer.
+An officer does the check and the timetable. A computer is used only for the Student Portal. A student moves to the next queue as soon as a step ends. If the needed officer or computer is busy, the student who has waited longest goes next.
 
-## Three experiments
-
-| Allocation | Officers | Computers | Makespan | Finished by 12:00 | Overtime | Officer use | Computer use | System efficiency |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Current desk | 1 | 1 | 250 min (12:10) | 19 / 20 | 10 min | 80.0% | 96.0% | 33.6% |
-| Second officer | 2 | 1 | 250 min (12:10) | 19 / 20 | 10 min | 40.0% | 96.0% | 36.7% |
-| Second computer | 1 | 2 | 204 min (11:24) | 20 / 20 | 0 | 98.0% | 58.8% | 45.3% |
-
-The portal computer is the limit on the current desk. A second officer does not change the finish time, and officer utilisation falls from 80% to 40%. A second computer brings the last student forward by 46 minutes and clears all 20 before noon. Average waiting falls from 43.4 minutes to 26.6 minutes.
-
-The most efficient allocation in this study is one officer and two computers. It is the only one that finishes the whole group before the desk closes.
-
-## Run the Python program
+## Run it
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python3 -m registration_sim
-python3 -m registration_sim --charts output/figures
-python3 -m pytest
+python registration.py
 ```
 
-## Run the page
+Change the morning with `--students`, `--interarrival`, `--officers`, `--computers`, and `--session`. The three experiments still use that same group of students and only change the officers and the computers.
 
 ```bash
-npm install
-npm run dev
+python registration.py --students 20 --officers 1 --computers 2
+python -m pytest
 ```
 
-The page listens on port 3847. `npm run parity` checks the page's engine against `tests/fixtures/parity.json`.
+The program prints the activity table, the single-run results, and the comparison of the three allocations. It writes three graphs and a CSV table to `output/figures/`.
 
-## What the project asks for
+## The three experiments
 
-- The model is deterministic: arrivals, times, and resources are fixed.
-- Resources and times are the table above.
-- `python3 -m registration_sim --students 20` registers a chosen group.
-- The three experiments give the total time under different allocations.
-- Adding an officer and adding a computer are reported separately.
-- The report includes students processed, utilisation, idle time, and system efficiency.
-- The comparison names the most efficient allocation and is shown as a table and as graphs.
+| Allocation | Officers | Computers | Total time | Finished by 12:00 | Overtime | Officer use | Computer use | Idle min. | System efficiency |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Current desk | 1 | 1 | 250 min (12:10) | 19 / 20 | 10 min | 80.0% | 96.0% | 60 | 33.6% |
+| Second officer | 2 | 1 | 250 min (12:10) | 19 / 20 | 10 min | 40.0% | 96.0% | 310 | 36.7% |
+| Second computer | 1 | 2 | 204 min (11:24) | 20 / 20 | 0 | 98.0% | 58.8% | 172 | 45.3% |
+
+All 20 students are processed in every experiment. The portal computer is the limit on the current desk. A second officer does not shorten the morning. A second computer finishes every student before noon and cuts the average wait from 43.4 minutes to 26.6 minutes.
+
+The most efficient allocation is one officer and two computers, because it is the only one that finishes the whole group inside the working period.
+
+## How this meets the brief
+
+- **a.** The model is a deterministic simulation. Arrivals, processing times, and resources are fixed.
+- **b.** The resources are registry officers and Student Portal computers. The times are in the table above.
+- **c.** `python registration.py --students 20` registers a chosen number of students.
+- **d.** The comparison table gives the total time for each allocation.
+- **e.** The second experiment adds an officer. The third adds a computer. The graphs show the effect on total time.
+- **f.** Each run reports utilisation, students processed, idle time, and system efficiency. System efficiency is time being served divided by time being served plus time waiting.
+- **g.** The program runs three allocations: the current desk, a second officer, and a second computer.
+- **h.** The program names the most efficient allocation: one officer and two computers.
+- **i.** The printed tables, `output/figures/scenario_comparison.csv`, and the three PNG graphs present the results. The paragraphs after the table interpret them.

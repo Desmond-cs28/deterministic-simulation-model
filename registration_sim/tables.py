@@ -65,8 +65,6 @@ def comparison_rows(runs: tuple[ScenarioRun, ...] | list[ScenarioRun]) -> list[l
                 str(metrics.overall_idle_minutes),
                 _num(metrics.average_waiting_minutes),
                 _pct(metrics.service_efficiency),
-                _pct(metrics.schedule_efficiency),
-                f"{metrics.efficiency_score:.3f}",
             ]
         )
     return rows
@@ -76,18 +74,16 @@ COMPARISON_HEADERS = [
     "Scenario",
     "Officers",
     "Computers",
-    "Makespan",
-    "In session",
+    "Total time",
+    "Finished",
     "Processed",
     "Overtime",
-    "Officer util.",
-    "Computer util.",
-    "Overall util.",
+    "Officer use",
+    "Computer use",
+    "Overall use",
     "Idle min.",
     "Avg wait",
-    "Service eff.",
-    "Schedule eff.",
-    "Score",
+    "System efficiency",
 ]
 
 

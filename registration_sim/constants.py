@@ -66,8 +66,8 @@ DISPLAY_INDEX_OFFSET = 1
 FIGURE_MAKESPAN = "makespan_by_scenario.png"
 FIGURE_UTILISATION = "utilisation_by_scenario.png"
 FIGURE_COMPLETIONS = "students_within_period.png"
-FIGURE_SENSITIVITY = "sensitivity_makespan.png"
 COMPARISON_CSV = "scenario_comparison.csv"
+DEFAULT_FIGURE_DIRECTORY = "output/figures"
 
 ARRIVAL_DELTA = 1
 DEPARTURE_DELTA = -1
