@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Palm University College registration simulation</title>
+  <style>
+    :root {
+      --ink: #14241c;
+      --green: #02553c;
+      --deep: #013326;
+      --paper: #f3f6f2;
+      --card: #ffffff;
+      --line: #c9ddd3;
+      --muted: #3d5348;
+      --gold: #c4a35a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.5 Georgia, "Times New Roman", serif;
+    }
+    header {
+      background: var(--deep);
+      color: #f4faf6;
+      padding: 2.2rem 1.25rem 1.8rem;
+    }
+    header p, main p { max-width: 44rem; }
+    .kicker {
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font: 0.72rem/1.4 ui-monospace, monospace;
+      color: #d7ebe3;
+    }
+    h1 { font-weight: 500; font-size: 2.4rem; line-height: 1.1; margin: 0.4rem 0; }
+    main { max-width: 68rem; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    h2 { font-weight: 500; font-size: 1.6rem; margin: 2rem 0 0.6rem; }
+    .steps, .stats { display: grid; gap: 0.8rem; }
+    .steps { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+    .stats { grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); margin-top: 1rem; }
+    article, .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 0.8rem;
+      padding: 0.9rem 1rem;
+    }
+    .step-no { color: var(--green); font: 0.72rem/1.4 ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; background: var(--card); font-size: 0.92rem; }
+    th, td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font: 0.72rem/1.3 ui-monospace, monospace; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+    tr.best { background: #d7ebe3; }
+    .wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 0.8rem; }
+    figure { margin: 1rem 0; background: var(--card); border: 1px solid var(--line); border-radius: 0.8rem; padding: 0.6rem; }
+    img { width: 100%; height: auto; display: block; }
+    figcaption { color: var(--muted); font-size: 0.9rem; padding: 0.4rem 0.3rem 0.2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="kicker">Palm University College · Manya Jorpanya</p>
+    <h1>Course registration simulation</h1>
+    <p>One morning at the Registry. 20 students arrive every 8 minutes from 08:00. The desk is open for 240 minutes. Arrivals and processing times are fixed, so this schedule is the same every time the program runs.</p>
+  </header>
+  <main>
+    <h2>The three steps</h2>
+    <div class="steps">
+      <article><p class="step-no">Step 1</p><h3>Registry check</h3><p>A registry officer checks the student ID and confirms the programme: Computer Science, Business Information Technology, or Business Administration.</p><p><strong>6 min</strong> · officer</p></article>
+<article><p class="step-no">Step 2</p><h3>Student Portal registration</h3><p>The student registers semester courses on a Student Portal computer at the registry desk.</p><p><strong>12 min</strong> · computer</p></article>
+<article><p class="step-no">Step 3</p><h3>Timetable issue</h3><p>The officer confirms the course list and issues the printed timetable.</p><p><strong>4 min</strong> · officer</p></article>
+    </div>
+    <h2>This morning, with the current desk</h2>
+    <p class="muted">1 officer and 1 computer.</p>
+    <div class="stats">
+      <div class="stat"><p class="step-no">Total time</p><p><strong>12:10 · 250 min</strong></p></div>
+      <div class="stat"><p class="step-no">Students processed</p><p><strong>20</strong></p></div>
+      <div class="stat"><p class="step-no">Finished by close</p><p><strong>19 / 20</strong></p></div>
+      <div class="stat"><p class="step-no">Idle time</p><p><strong>60 min</strong></p></div>
+      <div class="stat"><p class="step-no">Officer use</p><p><strong>80.0%</strong></p></div>
+      <div class="stat"><p class="step-no">Computer use</p><p><strong>96.0%</strong></p></div>
+      <div class="stat"><p class="step-no">System efficiency</p><p><strong>33.6%</strong></p></div>
+    </div>
+    <h2>Three resource allocations</h2>
+    <p>The same students are registered three times. First the desk as it stands, then one extra officer, then one extra computer.</p>
+    <div class="wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Allocation</th>
+            <th>Officers</th>
+            <th>Computers</th>
+            <th>Total time</th>
+            <th>Processed</th>
+            <th>Finished</th>
+            <th>Idle min.</th>
+            <th>Officer use</th>
+            <th>Computer use</th>
+            <th>System efficiency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Current desk</td><td>1</td><td>1</td><td>12:10 (250 min)</td><td>20</td><td>19</td><td>60</td><td>80.0%</td><td>96.0%</td><td>33.6%</td></tr>
+<tr><td>Second officer</td><td>2</td><td>1</td><td>12:10 (250 min)</td><td>20</td><td>19</td><td>310</td><td>40.0%</td><td>96.0%</td><td>36.7%</td></tr>
+<tr class="best"><td>Second computer · most efficient</td><td>1</td><td>2</td><td>11:24 (204 min)</td><td>20</td><td>20</td><td>172</td><td>98.0%</td><td>58.8%</td><td>45.3%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h2>Graphs</h2>
+    <figure><img src="output/figures/makespan_by_scenario.png" alt="makespan by scenario"><figcaption>makespan by scenario</figcaption></figure>
+<figure><img src="output/figures/utilisation_by_scenario.png" alt="utilisation by scenario"><figcaption>utilisation by scenario</figcaption></figure>
+<figure><img src="output/figures/students_within_period.png" alt="students within period"><figcaption>students within period</figcaption></figure>
+    <h2>What the results mean</h2>
+    <p>The most efficient allocation is <strong>Second computer</strong>: 1 officer and 2 computers.</p>
+    <p>Palm University College registers 20 undergraduates on this morning of course-registration week. Each student spends 22 minutes at the desk: a registry check, course registration on the Student Portal, and a timetable. The desk is open for 240 minutes from 08:00. With 1 officer and 1 computer the last student leaves at 250 minutes, 19 of 20 finish before the desk closes, and overtime is 10 minutes.</p>
+<p>On the current desk the portal computer is busy for 96.0% of the morning and the officer is busy for 80.0%. Students wait 43.4 minutes on average.</p>
+<p>Adding a registry officer (from 1 to 2) leaves the finish time at 250 minutes.</p>
+<p>Students finished before the desk closes move from 19 to 19. Officer utilisation moves from 80.0% to 40.0%.</p>
+<p>Adding a portal computer (from 1 to 2) brings the finish time forward by 46 minutes, from 250 to 204.</p>
+<p>Students finished before the desk closes move from 19 to 20. Average waiting moves from 43.4 minutes to 26.6 minutes.</p>
+<p>The most efficient allocation is Second computer: 1 officer and 2 computers. It finishes 20 of 20 students before the desk closes, in 204 minutes, with overall utilisation 71.9% and 172 idle resource-minutes.</p>
+  </main>
+</body>
+</html>

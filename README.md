@@ -34,7 +34,7 @@ python registration.py --students 20 --officers 1 --computers 2
 python -m pytest
 ```
 
-The program prints the activity table, the single-run results, and the comparison of the three allocations. It writes three graphs and a CSV table to `output/figures/`.
+The program prints the activity table, the single-run results, and the comparison of the three allocations. It writes three graphs and a CSV table to `output/figures/`, and it writes `index.html` so the results can be opened in a browser.
 
 ## The three experiments
 

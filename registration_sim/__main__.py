@@ -29,6 +29,7 @@ from registration_sim.experiments import recommend, run_study
 from registration_sim.metrics import measure
 from registration_sim.model import SimulationConfig
 from registration_sim.narrative import study_paragraphs
+from registration_sim.report_page import write_report
 from registration_sim.tables import (
     COMPARISON_HEADERS,
     activity_table,
@@ -142,9 +143,11 @@ def main() -> None:
     figures = save_study_charts(study, args.charts)
     csv_path = args.charts / COMPARISON_CSV
     write_csv(csv_path, study)
+    page = write_report(config, single_metrics, study, recommended, figures)
     for figure in figures:
         print(f"Wrote {figure}")
     print(f"Wrote {csv_path}")
+    print(f"Wrote {page}")
 
 
 if __name__ == "__main__":
